@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/videoListFragment">
+
+    <fragment
+        android:id="@+id/videoListFragment"
+        android:name="com.github.stevep.youtube.fragments.VideoListFragment"
+        android:label="VideoListFragment"
+        tools:layout="@layout/fragment_video_list">
+        <action
+            android:id="@+id/action_videoListFragment_to_videoDetailFragment"
+            app:destination="@id/videoDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoDetailFragment"
+        android:name="com.github.stevep.youtube.fragments.VideoDetailFragment"
+        android:label="VideoDetailFragment"
+        tools:layout="@layout/fragment_video_details">
+        <argument
+            android:name="video_id"
+            app:argType="integer" />
+    </fragment>
+</navigation>

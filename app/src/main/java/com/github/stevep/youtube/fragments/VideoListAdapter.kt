@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.github.stevep.youtube.R
 import com.github.stevep.youtube.data.Item
+import com.github.stevep.youtube.databinding.ItemVideoBinding
 import com.github.stevep.youtube.network.GlideApp
 import io.reactivex.subjects.PublishSubject
 
@@ -17,11 +17,13 @@ class VideoListAdapter
 constructor(context: Context, private val data: List<Item>) : RecyclerView.Adapter<VideoListAdapter.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
+    private lateinit var binding: ItemVideoBinding
+
     private val clickedVideoSubject = PublishSubject.create<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = inflater.inflate(R.layout.item_video, parent, false)
-        return ViewHolder(view)
+        binding = ItemVideoBinding.inflate(inflater, parent, false)
+        return ViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -32,7 +34,7 @@ constructor(context: Context, private val data: List<Item>) : RecyclerView.Adapt
                     .load(Uri.parse(thumbnailImage.url))
                     .into(holder.videoImageView)
         }
-        holder.titleView.text = data[position].snippet.title
+        binding.videoItem = data[position]
     }
 
     override fun getItemCount(): Int {
@@ -46,7 +48,6 @@ constructor(context: Context, private val data: List<Item>) : RecyclerView.Adapt
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         internal var videoItemLayout = itemView as ViewGroup
-        internal var titleView: TextView = itemView.findViewById(R.id.videoTitle)
         internal var videoImageView: ImageView = itemView.findViewById(R.id.videoImageView)
 
         init {

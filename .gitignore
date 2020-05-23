@@ -83,3 +83,6 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# private data
+app/src/main/res/values/strings_private.xml

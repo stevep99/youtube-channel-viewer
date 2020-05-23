@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/appBackground"
-    android:padding="@dimen/defaultMargin">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="videoItem" type="com.github.stevep.youtube.data.Item" />
+    </data>
 
-    <ImageView
-        android:id="@+id/videoImageView"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:background="@color/appBackground"
+        android:padding="@dimen/defaultMargin">
 
-    <TextView
-        android:id="@+id/videoTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/videoTextOverlay"
-        android:textSize="20sp"/>
+        <ImageView
+            android:id="@+id/videoImageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/videoDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/videoTextOverlay"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/videoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/videoTextOverlay"
+            android:text="@{videoItem.snippet.title}"
+            android:textSize="20sp"/>
 
-    <TextView
-        android:id="@+id/videoPublishDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/videoTextOverlay"
-        android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/videoDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/videoTextOverlay"
+            android:text="@{videoItem.snippet.description}"
+            android:textSize="14sp"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/videoPublishDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/videoTextOverlay"
+            android:text="@{videoItem.snippet.getPublishedAtFormatted()}"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+</layout>
+

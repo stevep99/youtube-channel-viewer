@@ -1,6 +1,8 @@
 package com.github.stevep.youtube.view_model
 
 import androidx.lifecycle.ViewModel
+import com.github.stevep.youtube.R
+import com.github.stevep.youtube.VideoApp
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -10,16 +12,16 @@ import com.github.stevep.youtube.network.RequestApi
 
 class VideoViewModel : ViewModel() {
 
-    private val VIDEO_CHANNEL_ID = "UC_A--fhX5gea0i4UtpD99Gg"
-
     private var items: List<Item>? = null
-    private var detailItemId: Int? = null
 
-    private val requestApi = RequestApi.getInstance()
+    private val YOUTUBE_KEY = VideoApp.app.resources.getString(R.string.youtube_key)
+    private val VIDEO_CHANNEL_ID = "UCoxcjq-8xIDTYp3uz647V5A"
+
+    private val requestApi = RequestApi.getService()
 
     fun requestVideoItems() : Single<List<Item>> {
         return if (items == null) {
-            requestApi.getChannelVideos(VIDEO_CHANNEL_ID)
+            requestApi.getChannelVideos(YOUTUBE_KEY, VIDEO_CHANNEL_ID)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .map { it.items }
@@ -33,14 +35,6 @@ class VideoViewModel : ViewModel() {
 
     fun getVideoItems(): List<Item>? {
         return items
-    }
-
-    fun setDetailItemId(item: Int?) {
-        this.detailItemId = item
-    }
-
-    fun getDetailItemId(): Int? {
-        return detailItemId
     }
 
 }

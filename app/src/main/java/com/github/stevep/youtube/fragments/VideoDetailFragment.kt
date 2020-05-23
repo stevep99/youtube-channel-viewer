@@ -6,9 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.github.stevep.youtube.R
 import com.github.stevep.youtube.data.Item
+import com.github.stevep.youtube.databinding.FragmentVideoDetailsBinding
 import com.github.stevep.youtube.network.GlideApp
 import com.github.stevep.youtube.view_model.VideoViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -18,27 +21,20 @@ import kotlinx.android.synthetic.main.fragment_video_details.*
 class VideoDetailFragment : Fragment() {
 
     private lateinit var viewModel: VideoViewModel
+    private lateinit var binding: FragmentVideoDetailsBinding
 
     private val subscribers = CompositeDisposable()
 
-    companion object {
-        fun newInstance(itemId: Int): VideoDetailFragment {
-            val fragment = VideoDetailFragment()
-            val args = Bundle()
-            args.putInt("itemId", itemId)
-            fragment.setArguments(args)
-            return fragment
-        }
-    }
+    private val args: VideoDetailFragmentArgs by navArgs()
+
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity()).get(VideoViewModel::class.java)
 
-        val itemId = arguments?.getInt("itemId") ?: throw IllegalArgumentException("missing itemId")
+        val item = viewModel.getVideoItems()?.get(args.videoId)
 
-        val item = viewModel.getVideoItems()?.get(itemId)
         if (item != null) {
             showItemDetails(item)
         }
@@ -51,13 +47,12 @@ class VideoDetailFragment : Fragment() {
                     .load(Uri.parse(thumbnailImage.url))
                     .into(videoImageView)
         }
-        videoTitle.text = item.snippet.title
-        videoDetails.text = item.snippet.description
-        videoPublishDate.text = item.snippet.publishedAt
+        binding.videoItem = item
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_video_details, container, false)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_video_details, container, false)
+        return binding.root
     }
 
     override fun onDestroy() {

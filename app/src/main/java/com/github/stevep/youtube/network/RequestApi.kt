@@ -9,19 +9,16 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import com.github.stevep.youtube.data.YouTubeResponse
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.http.Headers
 
 
 class RequestApi {
 
     companion object {
-        private val REQUEST_API = "https://www.googleapis.com/youtube/v3/"
-
-        private const val YOUTUBE_API_KEY ="AIzaSyD6rR4tJQQDSpyqMm0nsnNg9G1IgeY_xsU"
-        private const val VIDEOS_PATH = "search?key=" + YOUTUBE_API_KEY + "&part=snippet&order=date"
-
+        private val REQUEST_API = "https://www.googleapis.com/"
         private var service: RequestService? = null
 
-        fun getInstance() : RequestService {
+        fun getService(): RequestService {
             if (service == null) {
                 val logging = HttpLoggingInterceptor()
                 logging.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -44,8 +41,12 @@ class RequestApi {
     }
 
     interface RequestService {
-        @GET(VIDEOS_PATH)
-        fun getChannelVideos(@Query("channelId") ChannelId : String): Single<YouTubeResponse>
+        @Headers(
+            "X-Android-Package: com.github.stevep.youtube",
+            "X-Android-Cert: FD:8A:80:98:9F:04:B3:24:72:AB:F1:BE:87:16:1C:E5:F0:1D:7B:8A"
+        )
+        @GET("/youtube/v3/search?part=snippet&order=date")
+        fun getChannelVideos(@Query(value="key") key: String, @Query("channelId") ChannelId : String): Single<YouTubeResponse>
     }
 
 }

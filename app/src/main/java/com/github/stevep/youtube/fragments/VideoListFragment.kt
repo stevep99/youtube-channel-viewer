@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
-import com.github.stevep.youtube.VideoActivity
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import kotlinx.android.synthetic.main.fragment_video_list.*
 
 
@@ -51,7 +51,10 @@ class VideoListFragment : Fragment() {
         recyclerView?.adapter = videoAdapter
 
         subscribers.add(videoAdapter.getClickedVideoObserver()
-                .subscribe { itemId -> (activity as VideoActivity).showDetailFragment(itemId) }
+                .subscribe { itemId ->
+                    val action = VideoListFragmentDirections.actionVideoListFragmentToVideoDetailFragment(itemId)
+                    findNavController(this).navigate(action)
+                }
         )
     }
 
