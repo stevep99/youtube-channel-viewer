@@ -1,8 +1,8 @@
 package com.github.stevep.youtube
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.github.stevep.youtube.fragments.VideoDetailFragment
 import com.github.stevep.youtube.fragments.VideoListFragment
 import com.github.stevep.youtube.view_model.VideoViewModel
@@ -17,7 +17,7 @@ class VideoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_video)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = ViewModelProviders.of(this).get(VideoViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(VideoViewModel::class.java)
 
         if (savedInstanceState == null) {
             showListFragment()

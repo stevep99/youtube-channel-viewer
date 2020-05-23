@@ -1,18 +1,18 @@
 package com.github.stevep.youtube.fragments
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import io.reactivex.disposables.CompositeDisposable
 import com.github.stevep.youtube.view_model.VideoViewModel
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.widget.Toast
 import com.github.stevep.youtube.R
 import com.github.stevep.youtube.data.Item
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
+import androidx.lifecycle.ViewModelProvider
 import com.github.stevep.youtube.VideoActivity
 import kotlinx.android.synthetic.main.fragment_video_list.*
 
@@ -30,7 +30,7 @@ class VideoListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProviders.of(activity!!).get(VideoViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(VideoViewModel::class.java)
 
         loadingProgress.visibility = View.VISIBLE
         subscribers.add(viewModel.requestVideoItems()
