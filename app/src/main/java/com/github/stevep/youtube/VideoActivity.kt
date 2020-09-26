@@ -8,15 +8,11 @@ import com.github.stevep.youtube.view_model.VideoViewModel
 
 class VideoActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: VideoViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_video)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        viewModel = ViewModelProvider(this).get(VideoViewModel::class.java)
     }
 
     override fun onSupportNavigateUp(): Boolean {

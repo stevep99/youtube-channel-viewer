@@ -1,40 +1,31 @@
 package com.github.stevep.youtube.view_model
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import com.github.stevep.youtube.R
-import com.github.stevep.youtube.VideoApp
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import androidx.lifecycle.liveData
+import com.github.stevep.youtube.VideoApp.Companion.VIDEO_CHANNEL_ID
+import com.github.stevep.youtube.VideoApp.Companion.YOUTUBE_KEY
 import com.github.stevep.youtube.data.*
 import com.github.stevep.youtube.network.RequestApi
+import kotlinx.coroutines.Dispatchers
 
 
 class VideoViewModel : ViewModel() {
 
-    private var items: List<Item>? = null
-
-    private val YOUTUBE_KEY = VideoApp.app.resources.getString(R.string.youtube_key)
-    private val VIDEO_CHANNEL_ID = "UCoxcjq-8xIDTYp3uz647V5A"
+    private var liveData : LiveData<YouTubeResponse>? = null
 
     private val requestApi = RequestApi.getService()
 
-    fun requestVideoItems() : Single<List<Item>> {
-        return if (items == null) {
-            requestApi.getChannelVideos(YOUTUBE_KEY, VIDEO_CHANNEL_ID)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map { it.items }
-                    .doOnSuccess {
-                        this.items = it
-                    }
-        } else {
-            Single.just(items)
+    fun requestVideoItems(): LiveData<YouTubeResponse> {
+        liveData = liveData(Dispatchers.IO) {
+            emit(requestApi.getChannelVideosAlt(YOUTUBE_KEY, VIDEO_CHANNEL_ID))
         }
+        return liveData!!
     }
 
     fun getVideoItems(): List<Item>? {
-        return items
+        return liveData?.value?.items
     }
 
 }

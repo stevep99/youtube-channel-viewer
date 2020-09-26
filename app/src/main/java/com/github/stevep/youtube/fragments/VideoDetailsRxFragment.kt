@@ -19,9 +19,9 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_video_details.*
 
 
-class VideoDetailFragment : Fragment() {
+class VideoDetailRxFragment : Fragment() {
 
-    private lateinit var viewModel: VideoViewModel
+    private lateinit var viewModel: VideoRxViewModel
     private lateinit var binding: FragmentVideoDetailsBinding
 
     private val subscribers = CompositeDisposable()
@@ -32,7 +32,7 @@ class VideoDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel = ViewModelProvider(requireActivity()).get(VideoViewModel::class.java)
+        viewModel = ViewModelProvider(requireActivity()).get(VideoRxViewModel::class.java)
 
         val item = viewModel.getVideoItems()?.get(args.videoId)
 

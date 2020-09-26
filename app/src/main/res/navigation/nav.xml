@@ -16,9 +16,29 @@
     </fragment>
 
     <fragment
+        android:id="@+id/videoListRxFragment"
+        android:name="com.github.stevep.youtube.fragments.VideoListRxFragment"
+        android:label="VideoListRxFragment"
+        tools:layout="@layout/fragment_video_list">
+        <action
+            android:id="@+id/action_videoListRxFragment_to_videoDetailRxFragment"
+            app:destination="@id/videoDetailRxFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/videoDetailFragment"
         android:name="com.github.stevep.youtube.fragments.VideoDetailFragment"
         android:label="VideoDetailFragment"
+        tools:layout="@layout/fragment_video_details">
+        <argument
+            android:name="video_id"
+            app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/videoDetailRxFragment"
+        android:name="com.github.stevep.youtube.fragments.VideoDetailRxFragment"
+        android:label="VideoDetailRxFragment"
         tools:layout="@layout/fragment_video_details">
         <argument
             android:name="video_id"

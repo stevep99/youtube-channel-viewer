@@ -2,9 +2,11 @@ package com.github.stevep.youtube.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import io.reactivex.disposables.CompositeDisposable
 import com.github.stevep.youtube.view_model.VideoViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.Toast
 import com.github.stevep.youtube.R
 import com.github.stevep.youtube.data.Item
 import android.view.ViewGroup
@@ -12,14 +14,15 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.NavHostFragment
-import io.reactivex.disposables.CompositeDisposable
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import com.github.stevep.youtube.view_model.VideoRxViewModel
 import kotlinx.android.synthetic.main.fragment_video_list.*
 
 
-class VideoListFragment : Fragment() {
+class VideoListRxFragment : Fragment() {
 
-    private lateinit var viewModel: VideoViewModel
+    private lateinit var viewRxModel: VideoRxViewModel
+
     private val subscribers = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,11 +34,13 @@ class VideoListFragment : Fragment() {
 
         loadingProgress.visibility = View.VISIBLE
 
-        viewModel = ViewModelProvider(requireActivity()).get(VideoViewModel::class.java)
-        viewModel.requestVideoItems().observe(viewLifecycleOwner, Observer {
-            loadingProgress.visibility = View.GONE
-            populateRecyclerView(it.items)
-        })
+        viewRxModel = ViewModelProvider(requireActivity()).get(VideoRxViewModel::class.java)
+        subscribers.add(viewRxModel.requestVideoItems()
+                .doFinally { loadingProgress.visibility = View.GONE }
+                .subscribe(
+                        { populateRecyclerView(it) },
+                        { Toast.makeText(context, "Failed to load videos", Toast.LENGTH_SHORT).show() }
+                ))
     }
 
     fun populateRecyclerView(items: List<Item>) {
@@ -49,14 +54,15 @@ class VideoListFragment : Fragment() {
 
         subscribers.add(videoAdapter.getClickedVideoObserver()
                 .subscribe { itemId ->
-                    val action = VideoListFragmentDirections.actionVideoListFragmentToVideoDetailFragment(itemId)
-                    NavHostFragment.findNavController(this).navigate(action)
+                    val action = VideoListRxFragmentDirections.actionVideoListRxFragmentToVideoDetailRxFragment(itemId)
+                    findNavController(this).navigate(action)
                 }
         )
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        subscribers.dispose()
     }
 
 }

@@ -47,6 +47,9 @@ class RequestApi {
         )
         @GET("/youtube/v3/search?part=snippet&order=date")
         fun getChannelVideos(@Query(value="key") key: String, @Query("channelId") ChannelId : String): Single<YouTubeResponse>
+
+        @GET("/youtube/v3/search?part=snippet&order=date")
+        suspend fun getChannelVideosAlt(@Query(value="key") key: String, @Query("channelId") ChannelId : String): YouTubeResponse
     }
 
 }
